@@ -13,21 +13,21 @@ class Modal extends Component {
 
     clickOnEscKeyHandler = e => {
         if (e.code === 'Escape') {
-            this.props.closeModal();
+            this.props.onClose();
         }
     }
 
     clickOnBackdropHandler = e => {
         if (e.target === e.currentTarget) {
-            this.props.closeModal();
+            this.props.onClose();
         }
     }
 
     render() {
         return (
-            <div class={CSS.overlay} onClick={this.clickOnBackdropHandler}>
-                <div class={CSS.modal} >
-                    <img src={this.props.url} alt="" />
+            <div className={CSS.Overlay} onClick={this.clickOnBackdropHandler}>
+                <div className={CSS.Modal} >
+                    <img src={this.props.url} alt="img" width="800" />
                 </div>
             </div>
         )

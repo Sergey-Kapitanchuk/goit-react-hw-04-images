@@ -6,25 +6,25 @@ import { toast } from 'react-toastify';
 
 export default class Searchbar extends Component {
     state = {
-        imageName: "",
+        searchQuery: "",
     };
 
     handelNameChange = e => {
         this.setState({
-            imageName: e.currentTarget.value.toLowerCase()
+            searchQuery: e.currentTarget.value.toLowerCase()
         })
     };
 
     handleSubmit = e => {
         e.preventDefault();
-        const query = this.state.imageName.trim();
+        const query = this.state.searchQuery.trim();
 
-        if (query !== 0) {
+        if (query !== '') {
             this.props.onSubmit(query);
         } else {
             toast.error('Enter a valid search query!')
         }
-        this.setState({ imageName: "" })
+        this.setState({ searchQuery: "" })
     };
 
 
@@ -45,7 +45,7 @@ export default class Searchbar extends Component {
                         autoComplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        value={this.state.imageName}
+                        value={this.state.searchQuery}
                         onChange={this.handelNameChange}
                     />
                 </form>
