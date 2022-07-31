@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Searchbar from "./Searchbar/Searchbar";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import ImageGallery from "./ImageGallery/ImageGallery";
 import Modal from './Modal/Modal'
 import { API } from "./Services/API"

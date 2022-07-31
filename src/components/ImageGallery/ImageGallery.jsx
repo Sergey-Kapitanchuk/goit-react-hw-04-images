@@ -1,8 +1,5 @@
 import React from "react";
-import { toast } from "react-toastify";
 import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
-import Button from "../Button/Button";
-import Loader from "../Loader/Loader";
 import CSS from './ImageGallery.module.css'
 
 // import API from "../Services/API"
