@@ -1,90 +1,88 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import Searchbar from "./Searchbar/Searchbar";
 import { ToastContainer } from 'react-toastify';
 import ImageGallery from "./ImageGallery/ImageGallery";
-import Modal from './Modal/Modal'
+import { Modal } from './Modal/Modal'
 import { API } from "./Services/API"
 import Button from "./Button/Button";
 import Loader from "./Loader/Loader";
 
-export class App extends Component {
-  state = {
-    images: '',
-    page: 1,
-    modal: false,
-    url: '',
-    loader: false,
-    imagesData: [],
+export function App() {
+  // state = {
+  //   images: '',
+  //   page: 1,
+  //   modal: false,
+  //   url: '',
+  //   loader: false,
+  //   imagesData: [],
+  // };
+  const [images, setImages] = useState('');
+  const [page, setPage] = useState(1);
+  const [modal, setModal] = useState(false);
+  const [url, setUrl] = useState('');
+  const [loader, setLoader] = useState(false);
+  const [imagesData, setImagesData] = useState([]);
+
+
+
+  const onModal = () => {
+    setModal(prevState => !prevState);
   };
 
-
-
-  onModal = () => {
-    this.setState(prevState => ({
-      modal: !prevState.modal,
-    }));
+  const searchFormSubmitHandler = data => {
+    setImages(data);
+    setPage(1);
+    setImagesData([]);
   };
 
-  searchFormSubmitHandler = data => {
-    this.setState({
-      images: data,
-      page: 1,
-      imagesData: [],
-    });
+  const loadMore = () => {
+    // this.setState(prevState => ({ page: prevState.page + 1 }));
+    setPage(prevState => prevState + 1);
   };
 
-  loadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const showBigImg = bigImg => {
+    // this.setState({
+    //   url: bigImg,
+    // });
+    setUrl(bigImg);
+    setModal(prevState => !prevState);
+    // this.setState(prevState => ({
+    //   modal: !prevState.modal,
+    // }));
   };
 
-  showBigImg = bigImg => {
-    this.setState({
-      url: bigImg,
-    });
-    this.setState(prevState => ({
-      modal: !prevState.modal,
-    }));
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.images !== this.state.images ||
-      prevState.page !== this.state.page) {
-      this.setState({
-        loader: true,
-      });
-      API(this.state.images, this.state.page).then(data => {
-        this.setState(prevState => ({
-          imagesData: prevState.imagesData.concat(data),
-          loader: !prevState.loader,
-        }));
-      });
+  useEffect(() => {
+    if (images === '') {
+      return;
     }
-  }
+    setLoader(true)
+    API(images, page).then(data => {
+      setImagesData(prevState => prevState.concat(data));
+      setLoader(false)
+    })
+  }, [images, page]);
 
-  render() {
-    const { loader, imagesData, modal, url } = this.state;
-    const { searchFormSubmitHandler, showBigImg, loadMore, onModal } = this;
 
-    return (
-      <div>
-        <Searchbar onSubmit={searchFormSubmitHandler} />
+  return (
+    <div>
+      <Searchbar onSubmit={searchFormSubmitHandler} />
 
-        {imagesData.length > 0 ? (
-          <>
-            <ImageGallery
-              imagesData={imagesData}
-              onClick={showBigImg}
-            />
-            {loader && <Loader />}
-            <Button onClick={loadMore} />
-          </>
-        ) : <p>There are no pictures yet</p>}
+      {imagesData.length > 0 ? (
+        <>
+          <ImageGallery
+            imagesData={imagesData}
+            onClick={showBigImg}
+          />
+          {loader && <Loader />}
+          {imagesData.length >= 12 && <Button onClick={loadMore} />}
 
-        {modal && (
-          <Modal onClose={onModal} url={url} />
-        )}
-        <ToastContainer />
-      </div>
-    );
-  }
-}
+        </>
+      ) : <p>There are no pictures yet</p>}
+
+      {modal && (
+        <Modal onClose={onModal} url={url} />
+      )}
+      <ToastContainer />
+    </div>
+  );
+};

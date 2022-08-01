@@ -2,8 +2,6 @@ import React from "react";
 import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
 import CSS from './ImageGallery.module.css'
 
-// import API from "../Services/API"
-
 
 
 

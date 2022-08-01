@@ -1,55 +1,50 @@
-import { Component } from "react";
+import { useState } from "react";
 import CSS from './Searchbar.module.css'
 import { ImSearch } from 'react-icons/im'
 import { toast } from 'react-toastify';
 
 
-export default class Searchbar extends Component {
-    state = {
-        searchQuery: "",
+export default function Searchbar({ onSubmit }) {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handelNameChange = e => {
+        setSearchQuery(e.currentTarget.value.toLowerCase());
     };
 
-    handelNameChange = e => {
-        this.setState({
-            searchQuery: e.currentTarget.value.toLowerCase()
-        })
-    };
-
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        const query = this.state.searchQuery.trim();
 
-        if (query !== '') {
-            this.props.onSubmit(query);
+        if (searchQuery.trim() !== '') {
+            onSubmit(searchQuery.trim());
         } else {
-            toast.error('Enter a valid search query!')
+            toast.error('Enter a valid search query!');
         }
-        this.setState({ searchQuery: "" })
+        setSearchQuery('');
     };
 
 
-    render() {
-        return (
-            <header className={CSS.searchbar}>
-                <form className={CSS.form} onSubmit={this.handleSubmit}>
-                    <button type="submit" className={CSS.button}>
-                        <span className={CSS.button_label}>
-                            <ImSearch />
-                            Search
-                        </span>
-                    </button>
 
-                    <input
-                        className={CSS.input}
-                        type="text"
-                        autoComplete="off"
-                        autoFocus
-                        placeholder="Search images and photos"
-                        value={this.state.searchQuery}
-                        onChange={this.handelNameChange}
-                    />
-                </form>
-            </header>
-        )
-    }
+    return (
+        <header className={CSS.searchbar}>
+            <form className={CSS.form} onSubmit={handleSubmit}>
+                <button type="submit" className={CSS.button}>
+                    <span className={CSS.button_label}>
+                        <ImSearch />
+                        Search
+                    </span>
+                </button>
+
+                <input
+                    className={CSS.input}
+                    type="text"
+                    autoComplete="off"
+                    autoFocus
+                    placeholder="Search images and photos"
+                    value={searchQuery}
+                    onChange={handelNameChange}
+                />
+            </form>
+        </header>
+    );
+
 };
